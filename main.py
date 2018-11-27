@@ -12,17 +12,8 @@ def selection():
     else:
         print('That is no category!')
 
-def score():
-    score = 0
-    if main() == 'Correct' and score < 5:
-        score += 1
-    elif main() == 'In-Correct' and score < 5:
-        score -= 0
-    elif score >= 5:
-        print('You just won the category!')
-        return 'win'
-
 def main():
+    score = 0
     category = selection()
     num_lines = sum(1 for line in open(category))
     questions = []
@@ -36,16 +27,22 @@ def main():
         choice = random.choice(questions) - 1
         print(lines[choice])
         answer = input('>>>')
-        if score() == 'win':
-            print('You have won this category!')
+        if score >= 5:
+            print('You won!')
             game = 1
-        elif answer == lines[choice - 1]:
+        elif answer == lines[choice + 1].strip():
             print('Correct')
-            return 'correct'
+            score += 1
+        elif answer == 'save':
+            print('What is your name?')
+            name = input('>>>')
+            save = open("saves.txt", "a")
+            save.writelines(name)
+            save.writelines(str(score))
         else:
             print('In-Correct')
-            return 'incorrect'
     print('Thank you for playing!')
+
 
 
 main()
